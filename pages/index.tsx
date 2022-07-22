@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useEffect } from 'react';
+import Link  from 'next/link';
 
 declare global {
   namespace JSX {
@@ -14,10 +13,6 @@ declare global {
 }
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    import('../litComponents/todo-list')
-    import('../litComponents/chain-reaction')
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -29,8 +24,12 @@ const Home: NextPage = () => {
 
       <main style={{textAlign: 'center'}}>
         <h2>testing</h2>
-        <todo-list></todo-list>
-        <chain-reaction></chain-reaction>
+        <Link href="/todo">
+        <button type="button">Todo</button>
+        </Link>
+        <Link href="/chain-reaction">
+          <button type="button">Chain Reaction</button>
+        </Link>
       </main>
 
     </div>

@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import './cr-word';
 import './guess-word';
 import './reveal-letter';
+import { GuessWord } from './guess-word';
 
 @customElement('chain-reaction')
 export class ChainReaction extends LitElement {
@@ -98,7 +99,7 @@ export class ChainReaction extends LitElement {
   }
 
   handleGuess(event: Event) {
-    const target = event.target;
+    const target = event.target as GuessWord;
     const guess = target.guess.toLowerCase();
     const word = this.chain[this.currentWordIdx].toLowerCase();
     if (guess === word) {
