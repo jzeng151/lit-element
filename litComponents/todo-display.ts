@@ -10,8 +10,6 @@ export class TodoDisplay extends LitElement {
     }
   `
 
-  
-
   @property({type: String})
   todo: string = '';
 
@@ -21,15 +19,16 @@ export class TodoDisplay extends LitElement {
   @property({type: String})
   isEditing: string = 'false';
 
-  handleInput(event: Event): void {
+  // same as in todo-input maybe create helper function file? 
+  private _handleInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.editedTodo = target.value;
   }
 
-  editTodo() {
-    const input: HTMLInputElement = this.renderRoot.querySelector('#edit-todo');
+  private _editTodo() {
+    const input: HTMLInputElement = this.renderRoot?.querySelector('#edit-todo-input')!;
     input.value = '';
-    this.dispatchEvent(new Event('edit-todo'))
+    this.dispatchEvent(new Event('edit-todo'));
   }
 
   render() {
@@ -38,12 +37,12 @@ export class TodoDisplay extends LitElement {
       return html`
         <div id="edit-box">
           <input
-            id="edit-todo"
-            @input=${this.handleInput}
+            id="edit-todo-input"
+            @input=${this._handleInput}
             type="text"
             value=${this.todo} />
           <button
-            @click=${this.editTodo} >
+            @click=${this._editTodo} >
           Save
           </button>
         </div>

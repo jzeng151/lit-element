@@ -15,21 +15,21 @@ export class TodoList extends LitElement {
   @property({type: Array<String>})
   todosList: string[] = [];
 
-  addTodo(event: Event): void {
+  private _addTodo(event: Event): void {
     // grab newTodo from todo-input
     const target = event.target as TodoInput;
     this.todosList = [...this.todosList, target.newTodo];
   }
 
-  removeTodo(event: Event):void {
+  private _removeTodo(event: Event):void {
     const target = event.target as TodoCard;
-    const newTodosList = this.todosList.filter(todo => todo !== target.todo);
+    const newTodosList: Array<string> = this.todosList.filter(todo => todo !== target.todo);
     this.todosList = newTodosList;
   }
 
-  editTodo(event: Event):void {
+  private _editTodo(event: Event):void {
     const target = event.target as TodoCard;
-    const newTodosList = this.todosList.map(todo => {
+    const newTodosList: Array<string> = this.todosList.map(todo => {
       if (todo === target.todo) {
         return target.editedTodo
       } 
@@ -45,14 +45,14 @@ export class TodoList extends LitElement {
     return html`
       <div>
         <todo-input
-          @add-todo=${this.addTodo}>
+          @add-todo=${this._addTodo}>
         </todo-input>
         <div id="todo-list">
           ${map(this.todosList, todo => {
             return html`
               <todo-card
-                @remove-todo=${this.removeTodo}
-                @edit-todo=${this.editTodo}
+                @remove-todo=${this._removeTodo}
+                @edit-todo=${this._editTodo}
                 todo=${todo} >
               </todo-card>
             `

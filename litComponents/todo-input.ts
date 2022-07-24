@@ -1,7 +1,6 @@
 import { html, css, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-
 @customElement('todo-input')
 export class TodoInput extends LitElement {
 
@@ -14,13 +13,14 @@ export class TodoInput extends LitElement {
   @property({type: String})
   newTodo: string = '';
 
-  handleClick(): void {
-    const input: HTMLInputElement = this.renderRoot.querySelector('#todo-input');
+  private _handleClick(): void {
+    const input: HTMLInputElement = this.renderRoot.querySelector('#todo-input')!;
     input.value = '';
     this.dispatchEvent(new Event('add-todo'));
   }
 
-  handleInput(event: Event): void {
+  // same as in todo-display maybe create helper function file?
+  private _handleInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.newTodo = target.value;
   }
@@ -32,10 +32,10 @@ export class TodoInput extends LitElement {
         <h2>Todo List</h2>
         <input 
           id="todo-input"
-          @input=${this.handleInput} 
+          @input=${this._handleInput} 
           type="text" 
           placeholder="Enter new todo" />
-        <button @click=${this.handleClick} type="button">Add todo</button>
+        <button @click=${this._handleClick} type="button">Add todo</button>
       </div>
     `;
   }

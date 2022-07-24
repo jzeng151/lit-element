@@ -1,5 +1,5 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import './todo-input';
 import './todo-card';
 import './todo-display';
@@ -9,12 +9,12 @@ import { TodoDisplay } from './todo-display';
 export class TodoCard extends LitElement {
 
   static styles = css`
-    #removeTodo {
+    #remove-todo-button {
       float: right;
     }
-    #todoCard {
+    #todo-card {
       text-align: center;
-      background-color: #ff9999;
+      background-color: #a43955;
       border: 1px solid #1a1a1a;
       width: 40%;
       margin-left: 30%;
@@ -30,54 +30,62 @@ export class TodoCard extends LitElement {
 
   @property({type: String})
   isEditing: string = 'false';
+  
+  @property({type: Boolean})
+  isCompleted: Boolean = false;
 
-  removeTodo(): void {
+  private _removeTodo(): void {
     this.dispatchEvent(new Event('remove-todo'));
   }
 
-  editTodo(): void {
+  private _editTodo(): void {
     //if render is the edit input grab update todo with edited one and switch render to show todo
     if (this.isEditing === 'true') {
-      const todoDisplay = this.shadowRoot.querySelector('todo-display') as TodoDisplay;
-      console.log(todoDisplay)
+      const todoDisplay = this.shadowRoot?.querySelector('todo-display') as TodoDisplay;
       this.editedTodo = todoDisplay.editedTodo;
-      // this.todo = todoDisplay.editedTodo;
       this.dispatchEvent(new Event('edit-todo'));
-      // this.isEditing = 'false';
-    // switch render to show edit input
     } else if (this.isEditing === 'false') {
       this.isEditing = 'true';
     }
   }
-
-  changeStatus(): void {
-    // complete/incomplete task toggle
+  
+  // toggle complete/incomplete tasks
+  private _changeStatus(): void {
+    const todoCard: HTMLDivElement = this.shadowRoot?.querySelector('#todo-card')!;
+    // if todo is incomplete set it to complete
+    if(!this.isCompleted) {
+      todoCard.style.backgroundColor = '#39a453'; // green
+    } else if (this.isCompleted) {
+      todoCard.style.backgroundColor = '#a43955'; // red
+    }
+    this.isCompleted = !this.isCompleted;
   }
 
   render() {
 
     return html`
-      <div id="todoCard">
+      <div id="todo-card">
         <button 
-          @click=${this.removeTodo} 
+          @click=${this._removeTodo} 
           type="button" 
-          id="removeTodo" >
+          id="remove-todo-button" >
           X
         </button>
         <todo-display
-          @edit-todo=${this.editTodo}
+          @edit-todo=${this._editTodo}
           isEditing=${this.isEditing}
           todo=${this.todo} >
         </todo-display>
         <button
-          @click=${this.editTodo} >
+          @click=${this._editTodo} >
           Edit
         </button>
 
-        <button
-          @click=${this.changeStatus} >
-        Completed
-        </button>
+        <input
+          type="checkbox"
+          @click=${this._changeStatus} >
+        Done
+        </input>
 
       </div>
     `;
